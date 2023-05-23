@@ -1,0 +1,58 @@
+<div >
+  <div class=" row h-100 justify-content-center align-items-center center">
+    <div class="card card-container center transparent  " style="border-radius: 1.25em;">
+        <div class="card" style="border-radius: 1.25em;">
+        <article class="card-body login" style="border-radius: 1.25em;" >
+          <div class="head">  
+           <h2> Kayıt Ol</h2>
+          </div>
+           <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+           <div class="form-group">
+            <label class="form-label" for="email">E-posta</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="form.email" required email #email="ngModel"/>
+            <small class="p-error" role="alert" *ngIf="f.submitted && email.invalid">E-posta adresi giriniz!</small>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fullname">İsim Soyisim</label>
+            <input type="text" class="form-control" name="fullname" [(ngModel)]="form.fullname" required minlength="1" maxlength="50" #fullname="ngModel"/>
+            <small class="p-error" role="alert" *ngIf="f.submitted && fullname.invalid">İsim Soyisim giriniz!</small>
+          </div>
+          <div class="form-group" >
+            <label for="cellPhone">Telefon</label>
+            <p-inputMask validateMask="true" name="cellPhone" id="cellPhone" [(ngModel)]="form.cellPhone" mask="(999) 999-9999" #cellPhone="ngModel" autofocus></p-inputMask>
+            <small class="p-error" role="alert" *ngIf="form.cellPhone && validateCellPhone(form.cellPhone)">Geçerli bir telefon numarası giriniz.</small>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password">Şifre</label>
+            <input type="password" class="form-control" name="password" [(ngModel)]="form.password" required minlength="8" #password="ngModel"/>
+            <small class="p-error" role="alert" *ngIf="f.submitted && password.invalid" >Şifre giriniz!</small>
+            <small class="p-error" role="alert" *ngIf="password.hasError('minlength')" >Şifre en az 8 karakter olmalıdır</small>
+            
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="birthdate">Doğum Tarihi </label>
+            <p-calendar [(ngModel)]="form.birthdate" name="birthdate"  [readonlyInput]="true" #birthdate="ngModel" ></p-calendar>  
+            <small class="p-error" role="alert" *ngIf="f.submitted && birthdate.invalid">Doğum Günü giriniz!</small>  
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="gender">Cinsiyet </label>
+            <p-dropdown [options]="genders" name="gender" [(ngModel)]="form.gender" placeholder="Lütfen Cinsiyet Seçiniz" #gender="ngModel"  />
+            <small class="p-error" role="alert" *ngIf="f.submitted && gender.invalid">Cinsiyet Seçiniz!</small>  
+          </div>
+          <div class="form-group form-button" >
+            <button class="btn btn-secondary btn-block button">Kayıt ol</button>
+          </div>
+          <div class="form-group"> 
+            <a routerLink="/login" class="btn btn-text btn-block">Giriş yapmak için tıklayınız!</a>
+          </div>
+          <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+            Kayıt Başarısız!<br />
+            <span *ngFor="let item of errorMessage"> {{item}}<br/></span>
+          </div>                                            
+        </form>
+        <div class="alert alert-success" *ngIf="isSuccessful">
+          Kayıt Başarılı!
+        </div>
+
+        </article>

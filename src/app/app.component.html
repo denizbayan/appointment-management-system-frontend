@@ -1,0 +1,19 @@
+<mat-toolbar >
+ 
+    <a href="#" class="navbar-brand ">Psk. Gamze Bayan</a>
+    <span class="example-spacer"></span>
+    <a  href="/blog"  class="navbar-brand" *ngIf="isLoggedIn && showAdminBoard" >Blog Yönetimi</a>
+      <a  href="/dictionary"  class="navbar-brand" *ngIf="isLoggedIn && showAdminBoard" >Sözlük Yönetimi</a>
+    <a   class="navbar-brand" *ngIf="isLoggedIn" >{{fullname}}</a>
+    <a  href="/login" class="navbar-brand" *ngIf="!isLoggedIn" >Giriş Yap</a>
+    <a  href="/home" (click)="logout()" class="navbar-brand" *ngIf="isLoggedIn" >Çıkış Yap</a>
+ 
+  
+</mat-toolbar>
+<mat-sidenav-container>
+
+  <mat-sidenav-content id="main_sidenav_content" class="mat-sidenav-content-overflow">
+    <router-outlet ></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

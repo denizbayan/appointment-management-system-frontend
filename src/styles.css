@@ -1,0 +1,243 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/primeicons/primeicons.css';
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/primeng/resources/themes/saga-blue/theme.css';
+
+
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* general styles start*/
+.p-w-100{
+    width: 100% !important;
+}
+
+.p-w-60{
+    width: 60% !important;
+}
+
+.p-w-50{
+    width: 50% !important;
+}
+
+.border-radius-20,
+.border-radius-20>input{
+    border-radius:20px !important;
+}
+
+.border-radius-l-20,
+.border-radius-l-20>input{
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+.border-top-bottom{
+    border-bottom: 2px solid #5F2750;
+}
+
+.border-radius-r-20,
+.border-radius-r-20>button{
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.white-space-no{
+    white-space: nowrap;
+}
+
+.input-label-style{
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.mod-multi-select{
+    width:197px;
+}
+
+.hiddenRadioButton{
+    visibility: hidden;
+}
+
+
+.user-list-dropdown .p-multiselect-trigger .p-multiselect-trigger-icon{
+    color: #E60100 !important;
+}
+
+.mod-calendar{
+    height: calc(100vh - 216px) !important;
+}
+
+.mod-calendar .fc-prev-button,
+.mod-calendar .fc-next-button{
+    background: #282D3B !important;
+    border:none !important;
+}
+
+p-confirmdialog .p-confirm-dialog-reject,
+p-confirmdialog .p-confirm-dialog-accept{
+    background: #282D3B !important;
+    border: none !important;
+}
+
+.fc-daygrid-event.fc-daygrid-dot-event,
+.fc-daygrid-event.fc-daygrid-dot-event .fc-event-title{
+    background-color: #444444 !important;
+    color:#ffffff;
+    font-weight: 500;
+}
+.fc-daygrid-event.fc-daygrid-dot-event:hover{
+    background-color: #444444 !important;
+    color:#ffffff;
+    font-weight: 500;
+}
+
+.p-inputnumber-button-group button{
+    background: #282D3B;
+    border:none;
+}
+
+.p-w-70{
+    width: 70% !important;
+}
+
+.refresh-button-border{
+    border:2px solid #989898 !important;
+    width: 40px !important;
+    max-width: 40px !important;
+    min-width: 40px !important;
+}
+
+.zone-multiselect .p-multiselect-label-container{
+    max-width: 300px !important;
+    min-width: 0px !important;
+}
+.zone-multiselect .p-multiselect-panel{
+    width: 300px !important;
+}
+.zone-multiselect{
+    border-radius: 20px !important;
+}
+.zone-multiselect .p-multiselect-trigger-icon{
+    color: #E60100 !important;
+}
+
+.zone-multiselect .p-multiselect-token{
+    background: #ffadad !important;
+    color: #495057;
+    border-radius: 15px !important;
+}
+.zone-multiselect .p-multiselect-item.p-highlight{
+    background: #ffadad !important;
+    color: #495057;
+}
+.zone-multiselect .p-multiselect-item:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 0.15rem #fa3c3c;
+}
+
+.zone-multiselect .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    border-color: #E60100;
+    background: #E60100;
+    color: #ffffff;
+}
+
+.zone-multiselect .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: #E60100;
+    background: #E60100;
+}
+
+.zone-table .p-toolbar{
+    margin-bottom: 0px !important;
+}
+
+.rounded-button-size{
+    width: 37px !important;
+    height: 37px !important;
+}
+
+.radioCustomStyle .p-radiobutton .p-radiobutton-box.p-highlight {
+    border-color: #E60100 !important;
+    background: #E60100 !important;
+}
+
+.radioCustomStyle .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
+    border-color: #E60100 !important;
+    background: #E60100 !important;
+    color: #ffffff;
+}
+
+.radioCustomStyle .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+    border-color: #E60100 !important;
+}
+
+.radioCustomStyle .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #e6000041;
+}
+
+.barcode-img{
+
+    transition: transform .2s; /* Animation */
+
+  }
+  
+.barcode-img:hover {
+    transform: scale(1.6); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  }
+
+@media screen and (max-width:1366px) {
+    .p-90{
+        width: 90% !important;
+    }
+}
+
+.w-perc-100{
+    width: 100% !important;
+}
+/*
+.pagination-no-wrap .p-paginator-pages.ng-star-inserted{
+    white-space: nowrap;
+}
+
+.pagination-no-wrap .p-paginator-bottom.p-paginator{
+    flex-wrap: nowrap;
+}
+
+.pagination-no-wrap .p-paginator-current.ng-star-inserted{
+    white-space: nowrap;
+}*/
+
+
+
+
+
+.w100-p0{
+    min-width: 100% !important;
+    padding: 0px !important;
+}
+
+.p-paginator-bottom.p-paginator{
+    flex-wrap: nowrap;
+}
+
+.p-paginator-bottom.p-paginator-pages{
+    white-space: nowrap;
+}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+/* general styles end*/
+
+
+.form-label{
+    display: block;
+}
+
+.form-button{
+    margin-top: 15%;
+}

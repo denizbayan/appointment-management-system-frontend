@@ -1,0 +1,45 @@
+<div >
+  <div class=" row h-100 justify-content-center align-items-center center">
+    <div class="card card-container center transparent " style="border-radius: 1.25em;">
+        <div class="card " style="border-radius: 1.25em">
+        <article class="card-body login " style="border-radius: 1.25em;" >
+          <div > <h2> Giriş Yap</h2></div>
+          <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+            
+            <div class="form-group">
+              
+              <label for="email">E-Posta</label>
+              <input type="text" class="form-control" name="email" [(ngModel)]="form.email" required #email="ngModel" >
+              <small class="p-error" role="alert" *ngIf="f.submitted && email.invalid">Kullanıcı adı giriniz !</small>
+            </div>
+            <div class="form-group">
+              <label for="password">Şifre</label>
+              <input type="password" class="form-control" name="password" [(ngModel)]="form.password" required minlength="7" #password="ngModel" autocomplete="on" />
+            </div>
+            <div class="form-group"> 
+              <div class="checkbox">
+                <label style="padding-right:2% ;"> <input [(ngModel)]="form.rememberMe" name="rememberMe" type="checkbox"> Beni hatırla! </label>
+                <a class="float-right" href="/resetPassword">Şifremi Unuttum</a>
+              </div> <!-- checkbox .// -->
+            </div> <!-- form-group// -->  
+
+            <div class="form-group form-button">
+              <button   class="btn btn-secondary btn-block button">Giriş</button>
+            </div>
+            <div class="form-group"> 
+              <a routerLink="/register" class="btn btn-text btn-block">Kayıt olmak için tıklayınız!</a>
+            </div>
+            <div class="form-group">
+              <small class="p-error" role="alert" *ngIf="f.submitted && isLoginFailed">
+                {{errorMessage}}
+              </small>
+            </div>                                             
+          </form>
+        <div class="alert alert-success" *ngIf="isLoggedIn">
+          Hoş Geldiniz  {{ form.email }}
+        </div>
+
+        </article>
+        
+  </div>
+</div>

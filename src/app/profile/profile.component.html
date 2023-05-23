@@ -1,0 +1,97 @@
+
+<div class="container">
+
+  <div>
+
+    <p-dialog [visible]="!passChangeDialog" [style]="{width: '550px'}" header="Katılımcı Bilgileri" [closable]="false"
+      [draggable]="false" styleClass="p-fluid">
+
+      <div class="p-field">
+        <label for="name">Katılımcı Adı</label>
+        <input type="text" pInputText id="name" [(ngModel)]="user.username" [disabled]="user.id" required autofocus />
+      </div>
+      <div class="p-field">
+        <label for="email">E-posta</label>
+        <input type="email" pInputText id="email" [(ngModel)]="user.email" [disabled]="user.id" required autofocus />
+      </div>
+      <div class="p-field" style="margin-bottom:0px;">
+        <label for="name">Telefon</label>
+        <p-inputMask validateMask="true" id="cellPhone" [(ngModel)]="user.cellPhone" mask="(999) 999-9999"  autofocus></p-inputMask>
+        <small class="p-error" role="alert" *ngIf="user.cellPhone && validateCellPhone(user.cellPhone)">Geçerli bir telefon numarası giriniz.</small>
+      </div>
+      
+      <p-button style ="margin-top: 5px !important ; margin-bottom: 5px !important;" class="button is-primary is-fullwidth is-large" id="micTest" type="button"  (click)="showPassChangeDialog()">Şifre değiştir</p-button>
+      <button pButton pRipple label="Kaydet" class=" button" (click)="user.cellPhone && saveUser()"></button>
+
+    </p-dialog>
+  </div>
+</div>
+
+<p-dialog [(visible)]="passChangeDialog" [style]="{width: '550px'}" header="{{ChangePasswordHeader}}" [modal]="true"
+  styleClass="p-fluid" (onHide)="closePassChangeDialog()" (onShow)="AddDisplayHidePasswordListeners()">
+  <form #f="ngForm" name="form" (ngSubmit)="f.form.valid && changePass()" *ngIf="!isChangedPassword">
+    <label *ngIf="forgotPassword" for="code">Güvenlik Kodu</label>
+    <div *ngIf="forgotPassword" class="p-inputgroup">
+      <input type="email" class="form-control" name="code" [(ngModel)]="form.code" required code #code="ngModel"/>
+      <button [disabled]="disabledResendCodeButton" type="button" style="padding: 3px; white-space: nowrap;width: 35%;" class="form-control disabled-button-style" (click)="sendCode()" pButton pRipple label="Yeniden Gönder"></button>
+
+    </div>
+
+
+    <div *ngIf="forgotPassword" style="margin-top:2px; text-align:end;">
+      <p-progressBar class="code-time-progressbar" [showValue]="false" style="width: 100%; height: 10px;" [value]="codeTime"></p-progressBar>
+      <span style="font-size:14px;">kalan süre {{180 - time}} sn</span>
+    </div>
+
+    <div *ngIf="!forgotPassword" class="p-field">
+      <div class="form-group">
+        <label style="width: -webkit-fill-available;" for="currPassHtml">Şimdiki Şifre</label>
+        <span style="width: 100%;   " class="p-input-icon-right">
+          <i class="pi pi-eye-slash" id="toggleOldPassword"></i>
+          <input type="password" class="form-control" name="currPass" id="oldPassword" [(ngModel)]="form.oldPassword" required minlength="8" #currPassHtml="ngModel"/>
+        </span>
+        <small *ngIf="f.submitted && currPassHtml.hasError('required')" class="p-error" role="alert">Lütfen şimdiki şifrenizi giriniz!</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label style="width: -webkit-fill-available;" for="newPassHtml">Yeni Şifre</label>
+      <span style="width: 100%;   " class="p-input-icon-right">
+        <i class="pi pi-eye-slash" id="toggleNewPassword"></i>
+        <input type="password" class="form-control" name="newPass" id="newPassword"  [(ngModel)]="form.newPassword" required minlength="8" #newPassHtml="ngModel"/>
+      </span>
+      <small class="p-error" *ngIf="newPassHtml.invalid">
+        <div *ngIf="newPassHtml.hasError('required')">Şifre giriniz</div>
+        <div *ngIf="newPassHtml.hasError('minlength')">Şifreniz en az 8 karakter olmalıdır !</div>
+      </small>
+    </div>
+
+    <div class="form-group" style="margin-bottom:0px;">
+      <label style="width: -webkit-fill-available;" for="newPass2Html">Şifre Doğrula</label>
+      <span style="width: 100%;   " class="p-input-icon-right">
+        <i class="pi pi-eye-slash" id="toggleConfirmPassword"></i>
+        <input type="password" class="form-control" name="newPass2" id="confirmPassword" [(ngModel)]="form.confirmPassword" required minlength="8" #newPass2Html="ngModel"/>
+      </span>
+      <small class="p-error" *ngIf="newPass2Html.invalid">
+        <div *ngIf="newPass2Html.hasError('required')">Şifre giriniz</div>
+        <div *ngIf="newPass2Html.hasError('minlength')" >Şifreniz en az 8 karakter olmalıdır !</div>
+      </small>
+    </div>
+
+
+    <span *ngIf="!forgotPassword" (click)="setForgotPassword()"
+        style="font-size:14px; line-height: 2; color:#0075FF; cursor: pointer;">Şifremi unuttum</span>
+    <button style="margin-top: 15px;" type="submit" name="submit" pButton pRipple label="Şifre Yenile" class=" button"></button>
+    <div class="alert alert-warning" *ngIf="f.submitted && isChangePasswordFailed">
+      Güncelleme Başarısız!<br />
+      <span *ngFor="let item of errorMessage"> {{item}}<br/></span>
+    </div>  
+  </form>
+  <div class="alert alert-success" *ngIf="isChangedPassword">
+    <span>Şifreniz Başarıyla Yenilenmiştir</span>
+  </div>
+  
+  <div class="p-text-center" *ngIf="isChangedPassword">
+    <span (click)="redirectHome()" style="cursor: pointer;">Ana Sayfaya geri dönün <i class="fas fa-home"></i></span>
+  </div>
+</p-dialog>
