@@ -21,4 +21,17 @@ export class BlogService {
     return this.http.get(BLOG_API+'getPosts',httpOptions);
   }
 
+  deletePost(id:any):Observable<any>{
+    return this.http.delete(BLOG_API+'deletePost/'+id,httpOptions);
+  }
+
+  savePost(blogpost:any):Observable<any>{
+    return this.http.post(BLOG_API+'savePost',{
+      id:blogpost.id,
+      title:blogpost.title,
+      content:blogpost.content
+    },httpOptions);
+  }
+
+
 }

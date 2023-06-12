@@ -54,3 +54,10 @@ mat-sidenav-container {
  .example-spacer {
     flex: 1 1 auto;
   }
+
+
+  :host ::ng-deep p-menubarsub {
+    width: 100%;
+    margin-left: auto;
+}
+

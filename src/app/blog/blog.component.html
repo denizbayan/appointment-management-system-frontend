@@ -1,26 +1,29 @@
 
 
-<p-dataView #dv [value]="products" [layout]="layout">
+<p-dataView #dv [value]="posts" [layout]="layout">
     <ng-template pTemplate="header">
+        <button *ngIf="this.showAdminBoard" pButton pRipple label="Yeni" icon="pi pi-plus" class="p-button-danger p-mr-2" (click)="openBlogDialog(null)"></button>
         <div class="flex justify-content-end">
             <p-dataViewLayoutOptions Options></p-dataViewLayoutOptions>
         </div>
     </ng-template>
-    <ng-template let-product pTemplate="listItem">
+    <ng-template let-blogpost pTemplate="listItem">
         <div class="col-12">
             <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                 <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                     <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                        <div class="text-2xl font-bold text-900">{{ product.title }}</div>
-                        <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                        <div class="text-2xl font-bold text-900">{{ blogpost.title }}</div>
+                        <p-rating [ngModel]="blogpost.rating" [readonly]="true" [cancel]="false"></p-rating>
                         <div class="flex align-items-center gap-3">
                             <span class="flex align-items-center gap-2">
-                                
-                                <span class="font-semibold">{{ product.content }}</span>
+                                <span class="font-semibold">{{ blogpost.content }}</span>
                             </span>
-                            
+                           
                         </div>
+                        
                     </div>
+                    <button *ngIf="this.showAdminBoard" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Düzenle" (click)="openBlogDialog(blogpost)"></button>
+                    <button *ngIf="this.showAdminBoard"  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" pTooltip="Sil" (click)="deletePost(blogpost)"></button>  
                     <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                         
                     </div>
@@ -28,21 +31,23 @@
             </div>
         </div>
     </ng-template>
-    <ng-template let-product pTemplate="gridItem">
+    <ng-template let-blogpost pTemplate="gridItem">
         <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
             <div class="p-4 border-1 surface-border surface-card border-round">
                 <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                     <span class="flex align-items-center gap-2">
                         
-                        <span class="font-semibold">{{ product.title }}</span>
+                        <span class="font-semibold">{{ blogpost.title }}</span>
                     </span>
                     
                 </div>
                 <div class="flex flex-column align-items-center gap-3 py-5">
                     
-                    <div class="text-2xl font-bold">{{ product.content }}</div>
-                    <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                    <div class="text-2xl font-bold">{{ blogpost.content }}</div>
+                    <p-rating [ngModel]="blogpost.rating" [readonly]="true" [cancel]="false"></p-rating>
                 </div>
+                <button *ngIf="this.showAdminBoard" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Düzenle" (click)="openBlogDialog(blogpost)"></button>
+                <button *ngIf="this.showAdminBoard"  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" pTooltip="Sil" (click)="deletePost(blogpost)"></button>  
                 <div class="flex align-items-center justify-content-between">
                     
                     
@@ -51,3 +56,34 @@
         </div>
     </ng-template>
 </p-dataView>
+
+<p-dialog [(visible)]="blogDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}"
+    header="{{selected_blogpost.title}} " [modal]="true" styleClass="p-fluid " (onHide)="cleanTextFields()">
+    <ng-template pTemplate="content">
+
+        <div class="p-d-flex ">
+           
+            <div class="p-d-flex p-flex-column p-ai-center"
+                style="flex-basis: 75%; background: #E3E3E3; padding: 5px; border-radius: 25px; ">
+                <div class="p-field p-w-60 p-90">
+                    <label class="input-label-style" for="name">İçerik Başlığı</label>
+                    <input  class="border-radius-20" required type="text" pInputText id="name" [(ngModel)]="selected_blogpost.title" #blogposttitle="ngModel"
+                        required autofocus />
+                    <small class="p-error" *ngIf="submitted && blogposttitle.invalid">Lütfen İçeriğinize Başlık Girin</small>
+                </div>
+                <div class="p-field p-w-60 p-90">
+                    <label class="input-label-style" for="name">İçerik Metni</label>
+                    <input  class="border-radius-20" required type="text" pInputText id="name" [(ngModel)]="selected_blogpost.content" #blogpostcontent="ngModel"
+                        required autofocus />
+                    <small class="p-error" *ngIf="submitted && blogpostcontent.invalid">Lütfen İçerik Girin</small>
+                    
+                </div>
+                <button
+                    style="width: 120px !important; background-color: #282D3B !important; border-radius:20px !important;"
+                    pButton pRipple label="Kaydet" icon="pi pi-check-circle" iconPos="right"
+                    class="p-button-secondary save-button-icon" (click)="savePost(selected_blogpost)"></button>
+            </div>
+
+        </div>
+    </ng-template>
+</p-dialog>
