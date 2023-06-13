@@ -17,7 +17,7 @@ export class BlogComponent implements OnInit  {
   layout: string = 'list';
   submitted: boolean = false;
   selected_blogpost : any = {};
-  blogDialog :boolean = false;
+  showBlogDialog :boolean = false;
   constructor(private blogService: BlogService,private tokenStorageService: TokenStorageService ) { }
 
   ngOnInit() {
@@ -29,10 +29,6 @@ export class BlogComponent implements OnInit  {
     this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
 
     //.then((data) => (this.posts = data.slice(0, 12)));
-}
-
-openNew(){
-  console.log("opened new")
 }
 
 deletePost(blogpost:any){
@@ -49,7 +45,7 @@ deletePost(blogpost:any){
 
 
 openBlogDialog(blogpost: any){
-  this.blogDialog = true;
+  this.showBlogDialog = true;
   if (blogpost!= null){
     this.selected_blogpost.id = blogpost.id
     this.selected_blogpost.title = blogpost.title;
@@ -72,6 +68,7 @@ savePost(blogpost:any){
     data => {
       console.log(data)
       this.getPosts();
+      this.showBlogDialog = false
     },
     err=>{console.log(err)}
   );

@@ -120,7 +120,6 @@ export class AppComponent  implements OnInit {
       )
     }
 
-    this.translateService.setDefaultLang('en');
   }
   logout(): void {
     this.tokenStorageService.signOut();
