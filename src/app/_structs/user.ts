@@ -1,34 +1,41 @@
 export class User {
 
-    public username?: string;
+    public fullname?: string;
     public email?: string;
     public password?: string;
-    public phone_number?: number;
+    public cellPhone?: number;
     public gender?: string;
-    public birth_date?: Date;
+    public birthdate?: Date;
     public id?: number;
+    public rolestr?: string;
 
   
     constructor(data: any = null) {
       if(data !== null) {
-        this.username = data.username;
+        this.fullname = data.fullname;
         this.email = data.email;
         this.password = data.password;
-        this.phone_number = data.phone_number;
+        this.cellPhone = data.cellPhone;
         this.gender = data.gender;
-        this.birth_date = data.birth_date;
+        this.birthdate = data.birthdate;
         this.id = data.id;
 
+        if(data.roles.length == 2){
+          this.rolestr = "Psikolog"
+        }else{
+          this.rolestr = "Danışan"
+        }
 
       }
       else {
-        this.username = 'user';
+        this.fullname = 'user';
         this.email = 'email';
         this.password = '11';
         this.id = 0;
-        this.phone_number = 0;
+        this.cellPhone = 0;
         this.gender = "";
-        this.birth_date = new Date();
+        this.birthdate = new Date();
+        this.rolestr = "Danışan"
       }
     }
   }

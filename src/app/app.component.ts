@@ -76,6 +76,14 @@ export class AppComponent  implements OnInit {
               command : () => {window.location.href="/dictionary"}
             }
           )
+
+          this.subheaders.push(
+            {
+              label: 'Danışan Yönetimi',
+              icon: 'pi pi-fw pi-user',
+              command : () => {window.location.href="/users"}
+            }
+          )
       }
 
       this.subheaders.push(
@@ -95,6 +103,7 @@ export class AppComponent  implements OnInit {
               {
                   label: 'Profil Ayarları',
                   icon: 'pi pi-fw pi-users',
+                  command : () => {window.location.href="/profile"}
               },
               {
                   separator: true

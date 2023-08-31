@@ -1,0 +1,116 @@
+<p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Yeni" icon="pi pi-plus" class="p-button-danger p-mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Sil" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+        </ng-template>
+
+    </p-toolbar>
+
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['fullname','email']"
+        [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Gösterilen {first} - {last} ;Toplam {totalRecords} kullanıcı" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Kullanıcı Listesi</h5>
+                <div style="width: 56%;"></div>
+                <button pButton pRipple  icon="pi pi-refresh" tooltipPosition="left" pTooltip="Yenile" class="refresh-button-border p-button-danger p-button-text p-button-rounded" (click)="refreshList()"></button>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search mod-search-icon"></i>
+                    <input class="mod-search" pInputText type="text" (input)="dt.filterGlobal($event, 'contains')" placeholder="Ara..." [(ngModel)]="search_text_users"/>
+                    <i style="margin-left:-25px" (click)="search_text_users = ''; dt.filterGlobal('', 'contains')" class="pi pi-times mod-search-icon"></i>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="fullname">Kullanıcı Adı <p-sortIcon field="fullname"></p-sortIcon></th>
+                <th pSortableColumn="email">E-posta <p-sortIcon field="email"></p-sortIcon></th>
+                <th pSortableColumn="email">Telefon Numarası <p-sortIcon field="phone"></p-sortIcon></th>
+                <th >Rol </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                </td>
+                <td>{{user.fullname}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.cellPhone}}</td>
+                <td>{{user.rolestr}}</td>
+                <td>
+                    <button [disabled]="user.isGuest" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Düzenle" (click)="editUser(user)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" pTooltip="Sil" (click)="deleteUser(user)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                Toplam Kullanıcı Sayısı: {{users ? users.length : 0 }}
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog  [(visible)]="userDialog" [style]="{width: '450px'}" header="Kullanıcı Bilgileri" [modal]="true" styleClass="p-fluid editUserDialog">
+    <div >
+        <div class=" row h-100 justify-content-center align-items-center center">
+          <div class="card card-container center transparent  " style="border-radius: 1.25em;">
+              <div class="card" style="border-radius: 1.25em;">
+              <article class="card-body login" style="border-radius: 1.25em;" >
+                <div class="head">  
+                 <h2> Kullanıcı Bilgileri</h2>
+                </div>
+                 <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                 <div class="form-group">
+                  <label class="form-label" for="email">E-posta</label>
+                  <input type="email" class="form-control" name="email" [(ngModel)]="user.email" required email #email="ngModel"/>
+                  <small class="p-error" role="alert" *ngIf="f.submitted && email.invalid">E-posta adresi giriniz!</small>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="fullname">İsim Soyisim</label>
+                  <input type="text" class="form-control" name="fullname" [(ngModel)]="user.fullname" required minlength="1" maxlength="50" #fullname="ngModel"/>
+                  <small class="p-error" role="alert" *ngIf="f.submitted && fullname.invalid">İsim Soyisim giriniz!</small>
+                </div>
+                <div class="form-group" >
+                  <label for="cellPhone">Telefon</label>
+                  <p-inputMask validateMask="true" name="cellPhone" id="cellPhone" [(ngModel)]="user.cellPhone" mask="(999) 999-9999" #cellPhone="ngModel" autofocus></p-inputMask>
+                  <small class="p-error" role="alert" *ngIf="user.cellPhone && validateCellPhone(user.cellPhone)">Geçerli bir telefon numarası giriniz.</small>
+                </div>
+      
+                <div class="form-group">
+                  <label class="form-label" for="birthdate">Doğum Günü </label>
+                  <p-calendar [(ngModel)]="user.birthdate" name="birthdate"  [readonlyInput]="true" #birthdate="ngModel" ></p-calendar>  
+                  <small class="p-error" role="alert" *ngIf="f.submitted && birthdate.invalid">Doğum Günü giriniz!</small>  
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label" for="gender">Cinsiyet </label>
+                  <p-dropdown [options]="genders" name="gender" [(ngModel)]="user.gender" placeholder="Lütfen Cinsiyet Seçiniz" #gender="ngModel"  />
+                  <small class="p-error" role="alert" *ngIf="f.submitted && gender.invalid">Cinsiyet Seçiniz!</small>  
+                </div>
+
+                <button pButton pRipple label="Kaydet" class=" button" (click)="user.cellPhone && onSubmit()"></button>
+      
+                <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+                  Güncelleme Başarısız!<br />
+                  <span *ngFor="let item of errorMessage"> {{item}}<br/></span>
+                </div>                                            
+              </form>
+              <div class="alert alert-success" *ngIf="isSuccessful"> Güncelleme Başarılı!</div>
+      
+              </article>
+            </div> 
+        </div> 
+    </div> 
+</div> 
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { User } from '../_structs/user';
+import { UsersService } from '../_services/users.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,14 +14,16 @@ export class ProfileComponent implements OnInit {
   passChangeDialog: boolean = false;
 
   currentUser: any;
-  user :any;
+  auth_user : any;
+  user : User ={};
   form: any = {};
   forgotPassword: boolean = false;
   ChangePasswordHeader = "Şifre Değiştirme";
-  codeTime: number = 0;
-  time: number = 0;
-  disabledResendCodeButton: boolean=false;
 
+  genders = ["Kadın","Erkek","Diğer","Belirtmek istemiyorum"]
+
+  isSuccessful = false;
+  isSignUpFailed = false;
   isChangedPassword:boolean=false;
   numericRE : RegExp = /.*\d.*/;
   lowerCaseRE : RegExp = /.*[a-z].*/;
@@ -29,27 +32,44 @@ export class ProfileComponent implements OnInit {
   whiteSpaceRE : RegExp = /.*\s.*/;
   errorMessage : string[] = [];
   isChangePasswordFailed = false;
-  constructor(private tokenStorage: TokenStorageService, private messageService: MessageService) { }
+  constructor(private tokenStorage: TokenStorageService, private messageService: MessageService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.user = this.tokenStorage.getUser()
+    this.auth_user = this.tokenStorage.getUser()
+    var user_id  = JSON.parse(this.auth_user).id
 
-    
+    this.usersService.getUserById(user_id).subscribe(
+      data => {
+        this.user = data
+        this.user.birthdate = new Date(data.birthdate)
+    },
+    err => {
+      console.log(err);
+      this.isSignUpFailed=true;
+      this.isSuccessful=false;
+      this.errorMessage = err.error.message.split('.');
+      this.errorMessage[this.errorMessage.length-1] = this.errorMessage[this.errorMessage.length-1]+".";
+      this.errorMessage = this.errorMessage.filter(item=> item!="");
+    }
+    );
+
   }
 
-  redirectHome(): void {
 
-  }
 
   saveUser() {
   }
 
-  redirectLogin(): void {
-
-  }
-
   showPassChangeDialog() {
     this.passChangeDialog = true;
+  }
+
+  closePassChangeDialog() {
+    
+    this.passChangeDialog = false;
+    this.forgotPassword = false;
+    this.ChangePasswordHeader = "Şifre Değiştirme";
+    this.form = {}
   }
 
   AddDisplayHidePasswordListeners(){
@@ -82,15 +102,6 @@ export class ProfileComponent implements OnInit {
       // toggle the eye / eye slash icon
       //this.classList.toggle('pi-eye');
      });
-  }
-  
-  closePassChangeDialog() {
-    
-    this.passChangeDialog = false;
-    this.forgotPassword = false;
-    this.ChangePasswordHeader = "Şifre Değiştirme";
-    //clearInterval(this.intervalCode);
-    this.form = {}
   }
 
   changePass() {
@@ -162,39 +173,37 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  sendCode(): void {
-    /*this.authService.sendSecurityCode(this.user.email).subscribe(
-      data => {
-        console.log(data);
-        this.messageService.add({ severity: 'success', summary: 'Başarılı', detail: 'Şifre yenileme işlemi için güvenlik kodu gönderilmiştir. Lütfen e-postanızı kontrol ediniz!', life: 3000 });
-        this.time = 0;
-        this.disabledResendCodeButton =true;
-        this.intervalCode = setInterval(() => {
-          this.time += 1;
-          this.codeTime = this.time * 100 / 180;
-          if (this.time >= 180) {
-            clearInterval(this.intervalCode);
-            this.disabledResendCodeButton =false;
-          }
-        }, 1000)
-      },
-      err => {
-        console.log(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hata meydana geldi.' + err.error.message != undefined ? err.error.message : "Detay için loglara bakınız.", life: 3000 });
-      }
-    );*/
-  }
-
-  setForgotPassword() {
-    this.ChangePasswordHeader = "Şifremi Unuttum"
-    this.forgotPassword = true;
-    this.sendCode();
-  }
-
-  validateCellPhone(cellPhone: string): boolean{
+  validateCellPhone(cellPhone: any): boolean{
     if(cellPhone == "(___) ___-____") return false;
     var myregex = /^\D*(\d\D*){10}$/
     return !myregex.test(cellPhone);
+  }
+
+  onSubmit():void{
+    this.errorMessage = [];
+    var json_auth_user = JSON.parse(this.auth_user)
+    this.usersService.updateUser(this.user).subscribe(
+      data => {
+        console.log(data);
+        this.isSuccessful=true;
+        this.isSignUpFailed=false;
+        json_auth_user.email = this.user.email
+        json_auth_user.fullName = this.user.fullname
+        console.log(json_auth_user)
+        this.tokenStorage.saveUser(json_auth_user)
+        window.location.href = '/home';
+
+    },
+    err => {
+      console.log(err);
+      this.isSignUpFailed=true;
+      this.isSuccessful=false;
+      this.errorMessage = err.error.message.split('.');
+      this.errorMessage[this.errorMessage.length-1] = this.errorMessage[this.errorMessage.length-1]+".";
+      this.errorMessage = this.errorMessage.filter(item=> item!="");
+    }
+    );
+  
   }
 
 }

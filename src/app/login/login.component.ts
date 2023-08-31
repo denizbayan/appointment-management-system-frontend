@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         if (this.form.rememberMe == "false" || this.form.rememberMe == false) {
           this.tokenStorage.saveName("");
         } else {
-          this.tokenStorage.saveName(this.form.username);
+          this.tokenStorage.saveName(this.form.email);
         }
         this.isLoginFailed = false;
         this.isLoggedIn = true;

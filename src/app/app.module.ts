@@ -22,6 +22,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 
 import { DataViewModule, DataViewLayoutOptions } from 'primeng/dataview';
+import {ConfirmDialogModule } from 'primeng/confirmdialog';
 import {MenubarModule} from 'primeng/menubar';
 import {ToastModule } from 'primeng/toast';
 import {ToolbarModule } from 'primeng/toolbar';
@@ -51,14 +52,16 @@ import {BlockUI, BlockUIModule} from 'primeng/blockui';
 import {CalendarModule} from 'primeng/calendar';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {AccordionModule} from 'primeng/accordion';
-import {ConfirmDialogModule } from 'primeng/confirmdialog';
 import {InputTextareaModule} from 'primeng/inputtextarea';
+import { TabViewModule } from 'primeng/tabview';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BlogComponent } from './blog/blog.component';
 import { PsyDictionaryComponent } from './psy-dictionary/psy-dictionary.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MustMatchDirective } from './_helpers/MustMatchDirective';
+import { UsersComponent } from './users/users.component';
+import { SessionsComponent } from './sessions/sessions.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -73,7 +76,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     BlogComponent,
     PsyDictionaryComponent,
     ResetPasswordComponent,
-    MustMatchDirective
+    MustMatchDirective,
+    UsersComponent,
+    SessionsComponent
   ],
   imports: [
     TranslateModule.forRoot({
@@ -99,6 +104,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ConfirmDialogModule,
     InputNumberModule,
     InputTextareaModule,
+    TabViewModule,
     CalendarModule,
     DropdownModule,
     RadioButtonModule,

@@ -13,7 +13,7 @@
                 <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                     <div class="flex flex-column align-items-center sm:align-items-start gap-3">
                         <div class="text-2xl font-bold text-900">{{ blogpost.title }}</div>
-                        <p-rating [ngModel]="blogpost.rating" [readonly]="true" [cancel]="false"></p-rating>
+                        <p-rating [ngModel]="blogpost.rate" [readonly]="true" [cancel]="false"></p-rating>
                         <div class="flex align-items-center gap-3">
                             <span class="flex align-items-center gap-2">
                                 <span class="font-semibold">{{ blogpost.content }}</span>
@@ -44,7 +44,7 @@
                 <div class="flex flex-column align-items-center gap-3 py-5">
                     
                     <div class="text-2xl font-bold">{{ blogpost.content }}</div>
-                    <p-rating [ngModel]="blogpost.rating" [readonly]="true" [cancel]="false"></p-rating>
+                    <p-rating [ngModel]="blogpost.rate" [readonly]="true" [cancel]="false"></p-rating>
                 </div>
                 <button *ngIf="this.showAdminBoard" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Düzenle" (click)="openBlogDialog(blogpost)"></button>
                 <button *ngIf="this.showAdminBoard"  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" pTooltip="Sil" (click)="deletePost(blogpost)"></button>  

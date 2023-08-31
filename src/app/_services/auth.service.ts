@@ -42,10 +42,11 @@ export class AuthService {
 
   resetPassword(resetInfo:ResetPassword){
     return this.http.post(AUTH_API+'resetPassword',
-    {username:resetInfo.email,
-    email:resetInfo.email,
-    code:resetInfo.code,
-    password:resetInfo.newPassword},
+    {
+      email:resetInfo.email,
+      code:resetInfo.code,
+      password:resetInfo.newPassword
+    },
     httpOptions)
   }
 
