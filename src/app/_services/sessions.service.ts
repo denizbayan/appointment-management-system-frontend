@@ -32,10 +32,11 @@ export class SessionsService {
   }
 
   saveSession(session:any):Observable<any>{
+    console.log(session)
     return this.http.post(SESSION_API+'saveSession',{
       sessionID:session.id,
-      patientID:session.user.id,
-      psychologistID:session.psychologist.id,
+      patientID:session.patient_user.id,
+      psychologistID:session.psychologist_user.id,
       sessionDate:session.session_date,
       status : session.status
     },httpOptions);

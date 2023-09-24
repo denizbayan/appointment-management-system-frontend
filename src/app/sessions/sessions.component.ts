@@ -21,6 +21,7 @@ export class SessionsComponent implements OnInit {
     futureSessions :any[] = []
     pastSessions :any[] = []
     waitingSessions :any[] = []
+    rejectedSessions :any[] = []
     users :any[] =[]
     psychologist_users :any[] =[]
     x : string[]=["asd","as"]
@@ -30,6 +31,9 @@ export class SessionsComponent implements OnInit {
     selected_session : any = {};
     showSessionDialog :boolean = false;
     user: any;
+
+    session_status = session_status
+
     constructor(private sessionsService: SessionsService,private usersService: UsersService,private tokenStorageService: TokenStorageService ) { }
 
     ngOnInit() {
@@ -72,14 +76,14 @@ export class SessionsComponent implements OnInit {
   cleanTextFields(){
     this.selected_session={}
   }
-
-  saveSession(session:any){
+  //update has bugs
+  saveSession(session:any,new_status: session_status){
    
     this.submitted = true;
     if (session.id == undefined){
       session.id = -1
-      session.status= session_status.WAITING
     }
+    session.status= new_status
 
     this.sessionsService.saveSession(session).subscribe(
       data => {
@@ -96,6 +100,7 @@ export class SessionsComponent implements OnInit {
     this.futureSessions= []
     this.pastSessions= []
     this.waitingSessions= []
+    this.rejectedSessions= []
 
     if (isAdmin){
       this.sessionsService.getSessions("management").subscribe(
@@ -103,14 +108,23 @@ export class SessionsComponent implements OnInit {
 
           for(var i = 0; i<data.length ; i++){
             console.log(data[i])
+            console.log(data[i].status)
             data[i].date = new Date(data[i].date)
-            if ( data[i].status = session_status.WAITING){
-              this.waitingSessions = [...this.waitingSessions, data[i]];
-            }else if (new Date(data[i].date).getTime() > new Date().getTime()){
-              this.futureSessions = [...this.futureSessions, data[i]];
-            }else{
-              this.pastSessions = [...this.pastSessions, data[i]];
+            switch (data[i].status){
+              case session_status.WAITING:
+                this.waitingSessions = [...this.waitingSessions, data[i]];
+                break;
+              case session_status.REJECTED:
+                this.rejectedSessions = [...this.rejectedSessions, data[i]];
+                break;
+              case session_status.APPROVED:
+                if (new Date(data[i].date).getTime() > new Date().getTime()){
+                  this.futureSessions = [...this.futureSessions, data[i]];
+                }else{
+                  this.pastSessions = [...this.pastSessions, data[i]];
+                }
             }
+
           }
 
         },
@@ -122,15 +136,19 @@ export class SessionsComponent implements OnInit {
           for(var i = 0; i<data.length ; i++){
             console.log(data[i])
             data[i].date = new Date(data[i].date)
-            console.log(data[i].status)
-            console.log(session_status.WAITING)
-            if ( data[i].status = session_status.WAITING){
-              this.waitingSessions = [...this.waitingSessions, data[i]];
-              //this.waitingSessions = [...this.waitingSessions, data[i]];
-            }else if (new Date(data[i].date).getTime() > new Date().getTime()){
-              this.futureSessions = [...this.futureSessions, data[i]];
-            }else{
-              this.pastSessions = [...this.pastSessions, data[i]];
+            switch (data[i].status){
+              case session_status.WAITING:
+                this.waitingSessions = [...this.waitingSessions, data[i]];
+                break;
+              case session_status.REJECTED:
+                this.rejectedSessions = [...this.rejectedSessions, data[i]];
+                break;
+              case session_status.APPROVED:
+                if (new Date(data[i].date).getTime() > new Date().getTime()){
+                  this.futureSessions = [...this.futureSessions, data[i]];
+                }else{
+                  this.pastSessions = [...this.pastSessions, data[i]];
+                }
             }
           }
 

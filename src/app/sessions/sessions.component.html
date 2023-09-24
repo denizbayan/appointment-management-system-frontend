@@ -81,12 +81,39 @@
                                     </span>
                                 </div>
                             </div>
-                            <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" pTooltip="Kabul Et" (click)="openSessionDialog(session)"></button>
-                            <button   pButton pRipple icon="pi pi-clock" class="p-button-rounded p-button-success p-mr-2" pTooltip="Düzenle" (click)="deleteSession(session)"></button>  
-                            <button  pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-success p-mr-2" pTooltip="Reddet" (click)="openSessionDialog(session)"></button>
+                            <button  pButton pRipple icon="pi pi-check"  label = "Kabul Et" class="p-button-rounded p-button-success p-mr-2" pTooltip="Kabul Et" (click)="saveSession(session,session_status.APPROVED)"></button>
+                            <button  pButton pRipple icon="pi pi-pencil" label = "Düzenle" class="p-button-rounded p-button-warning p-mr-2" pTooltip="Düzenle" (click)="openSessionDialog(session)"></button>  
+                            <button  pButton pRipple icon="pi pi-times" label = "Reddet" class="p-button-rounded p-button-danger p-mr-2" pTooltip="Reddet" (click)="saveSession(session,session_status.REJECTED)"></button>
                             
                             <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        
+        </p-dataView>
+    </p-tabPanel>
+
+    <p-tabPanel header="Reddedilen Seanslar">
+        <ng-template pTemplate="header">
+            <i class="pi pi-calendar"></i>
+            <span>Reddedilen Seanslar</span>
+        </ng-template>
+        <p-dataView #dv [value]="rejectedSessions" [layout]="layout">
+
+            <ng-template let-session pTemplate="listItem" disabled="True">
+                <div class="col-12">
+                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+                        <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                                <div class="text-2xl font-bold text-900">{{ session.patient_user.user.fullname }}</div>
+                                <div class="flex align-items-center gap-3">
+                                    <span class="flex align-items-center gap-2">
+                                        <span class="font-semibold">{{ session.date }}</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,7 +130,7 @@
 
 
 <p-dialog [(visible)]="showSessionDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}"
-    header="{{selected_session.user}} - {{selected_session.date}} " [modal]="true" styleClass="p-fluid " (onHide)="cleanTextFields()">
+    header="{{selected_session.patient_user}} - {{selected_session.session_date}} " [modal]="true" styleClass="p-fluid " (onHide)="cleanTextFields()">
     <ng-template pTemplate="content">
 
         <div class="p-d-flex ">
@@ -111,14 +138,14 @@
             <div class="p-d-flex p-flex-column p-ai-center"
                 style="flex-basis: 75%; background: #E3E3E3; padding: 5px; border-radius: 25px; ">
                 <div class="p-field p-w-60 p-90">
-                    <label class="form-label" for="user">Danışan </label>
-                    <p-dropdown class="border-radius-20" [options]="users" optionLabel="fullname" [(ngModel)]="selected_session.user" #user="ngModel" [disabled]="!showAdminBoard"  ></p-dropdown>
-                    <small class="p-error" *ngIf="submitted && user.invalid">Lütfen kullanıcı seçiniz!</small>
+                    <label class="form-label" for="patient_user">Danışan </label>
+                    <p-dropdown class="border-radius-20" [options]="users" optionLabel="fullname" [(ngModel)]="selected_session.patient_user" #patient_user="ngModel" [disabled]="!showAdminBoard"  ></p-dropdown>
+                    <small class="p-error" *ngIf="submitted && patient_user.invalid">Lütfen kullanıcı seçiniz!</small>
                 </div>
                 <div class="p-field p-w-60 p-90">
-                    <label class="form-label" for="psychologist">Psikolog </label>
-                    <p-dropdown class="border-radius-20" [options]="psychologist_users" optionLabel="fullname" [(ngModel)]="selected_session.psychologist" #psychologist="ngModel"   ></p-dropdown>
-                    <small class="p-error" *ngIf="submitted && psychologist.invalid">Lütfen Psikolog seçiniz!</small>
+                    <label class="form-label" for="psychologist_user">Psikolog </label>
+                    <p-dropdown class="border-radius-20" [options]="psychologist_users" optionLabel="fullname" [(ngModel)]="selected_session.psychologist_user" #psychologist_user="ngModel"   ></p-dropdown>
+                    <small class="p-error" *ngIf="submitted && psychologist_user.invalid">Lütfen Psikolog seçiniz!</small>
                 </div>
 
                 
@@ -133,7 +160,7 @@
                 <button
                     style="width: 120px !important; background-color: #282D3B !important; border-radius:20px !important;"
                     pButton pRipple label="Kaydet" icon="pi pi-check-circle" iconPos="right"
-                    class="p-button-secondary save-button-icon" (click)="saveSession(selected_session)"></button>
+                    class="p-button-secondary save-button-icon" (click)="saveSession(selected_session,session_status.WAITING)"></button>
             </div>
 
         </div>
